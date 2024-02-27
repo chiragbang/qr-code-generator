@@ -1,95 +1,101 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client"
+import React, { useState } from 'react';
+import QRCode from 'qrcode.react';
+import "../Page.css";
+import { FaQrcode, FaSave } from "react-icons/fa";
+import Image from 'next/image';
+import { ChromePicker } from 'react-color'; // Import ChromePicker from react-color
 
-export default function Home() {
+const Page = () => {
+  const [link, setLink] = useState('');
+  const [qrCodeValue, setQRCodeValue] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [showDefaultImage, setShowDefaultImage] = useState(true); // State to control displaying default image
+  const [qrCodeColor, setQRCodeColor] = useState('#000'); // State for QR code color
+
+  const generateRandomDelay = () => {
+    return Math.floor(Math.random() * (5000 - 2000 + 1)) + 2000; // Random delay between 2 and 5 seconds (in milliseconds)
+  };
+
+  const generateQRCode = () => {
+    setLoading(true); // Set loading to true when generating QR code
+    setQRCodeValue(link);
+    setShowDefaultImage(false); // Hide default image
+    // Random delay for loader
+    const delay = generateRandomDelay();
+    setTimeout(() => {
+      setLoading(false);
+    }, delay);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      generateQRCode();
+    }
+  };
+
+  const handleSave = () => {
+    const canvas = document.querySelector('.generated-code canvas');
+    const imageUrl = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+    const link = document.createElement('a');
+    link.href = imageUrl;
+    link.download = 'qr-code.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleColorChange = (color) => {
+    setQRCodeColor(color.hex); // Update QR code color
+  };
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <>
+      <h1>Generate your unique<span> QR code</span></h1>
+      <div className='container'>
+        <input
+          type="text"
+          value={link}
+          onChange={(e) => setLink(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Enter your link"
+        />
+        <button onClick={generateQRCode}>
+          <p>
+            Generate
+          </p>
+          <FaQrcode />
+        </button>
+        <button onClick={handleSave}>
+          <p>
+            Save
+          </p>
+          <FaSave />
+        </button>
+      </div>
+
+      <div className='qr-code'>
+        {loading ? (
+          <div>
+            <Image width={300} height={300} src="/loader.gif" />
+          </div> // Display loader while loading is true
+        ) : (
+          showDefaultImage ? (
+            <div className='default-image'>
+              <Image width={300} height={300} src="/dummy.png" />
+            </div>
+          ) : (
+            qrCodeValue && <div className='generated-code'><QRCode size={300} value={qrCodeValue} fgColor={qrCodeColor} /></div>
+          )
+        )}
+
+        <div className="color-picker-container">
+          <h2>Change color :</h2>
+          <ChromePicker color={qrCodeColor} onChange={handleColorChange} />
         </div>
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    </>
   );
 }
+
+export default Page;

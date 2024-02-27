@@ -1,0 +1,106 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+h1{
+    font-size: 3rem;
+    text-align: center;
+    background-color: black;
+    color: aliceblue;
+    padding-block: 20px;
+}
+
+h1 span{
+    font-size: 4rem;
+    color: red;
+}
+
+
+
+.container{
+    max-width: 1240px;
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    place-content: center;
+    margin-top: 50px;
+
+}
+
+.container input{
+    width: 80%;
+    padding-block: 10px;
+    padding-inline: 20px;
+    font-size: 1rem;
+    border: none;
+border: 1px solid gray;
+border-radius: 20px;
+}
+
+.container button{
+    font-size: 1rem;
+    padding-block: 10px;
+    padding-inline: 20px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background-color: black;
+    color: aliceblue;
+    border-radius: 10px;
+}
+
+.container button:hover{
+    cursor: pointer;
+    background-color: aliceblue;
+    color: black;
+}
+
+
+.qr-code {
+    max-width: 1240px;
+    width: 100%;
+    margin-inline: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-top: 20px; 
+    padding-block: 20px;
+    padding-inline: 40px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  }
+  
+  /* Optional: Center the QR code horizontally */
+  .qr-code img {
+    display: block;
+    margin: 0 auto;
+  }
+
+  .generated-code{
+    padding-block: 20px;
+    padding-inline: 30px;
+    border: 1px solid black;
+    border-radius: 10px;
+  }
+
+  .default-image{
+    padding-block: 20px;
+    padding-inline: 30px;
+    border: 1px solid gray;
+  }
+
+  .color-picker-container{
+    padding: 20px;
+    line-height: 2.5rem;
+  }
+
+
+
+
